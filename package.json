@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "koa"
+    "koa","mongoose","swig"
   ],
   "author": "Alan",
   "license": "ISC",
