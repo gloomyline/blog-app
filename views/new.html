@@ -1,9 +1,22 @@
-{% extends 'layout.html' %} {% block title %}New Post{% endblock %} {% block content %}
-<h1>New Post</h1>
-<p>Create a new post.</p>
+{% extends 'layout.html' %} {% block title %}New Blog{% endblock %} 
+
+{% block content %}
+
+{% if data.id %}
+<h1>Modify Blog</h1>
+<p>Modify this blog.</p>
+<form action="/post/update/{{data.id.toString()}}" method="post">
+    <p><input type="text" placeholder="Title" name="title" value="{{data.title}}"></p>
+    <p><textarea placeholder="Contents" name="content">{{data.content}}</textarea></p>
+    <p><input type="submit" value="Save"></p>
+</form>
+{% else %}
+<h1>Create Blog</h1>
+<p>Create a new blog.</p>
 <form action="/post" method="post">
-    <p><input type="text" placeholder="Title" name="title"></p>
-    <p><textarea placeholder="Contents" name="content"></textarea></p>
+    <p><input type="text" placeholder="Title" name="title" value="{{data.title}}"></p>
+    <p><textarea placeholder="Contents" name="content">{{data.content}}</textarea></p>
     <p><input type="submit" value="Create"></p>
 </form>
+{% endif %}
 {% endblock %}

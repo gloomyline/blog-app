@@ -1,12 +1,16 @@
-{% extends 'layout.html' %} {% block title %}Posts{% endblock %} {% block content %}
-<h1>Posts</h1>
-<p>You have <strong>{{ posts.length }}</strong> posts!</p>
-<p><a href="/post/new">Create a Post</a></p>
+{% extends 'layout.html' %} 
+
+{% block title %}List{% endblock %} 
+
+{% block content %}
+<h1>Blogs</h1>
+<p>You have <strong>{{ count }}</strong> blogs!</p>
+<p><a href="/post/new">Create a blog</a></p>
 <ul id="posts">
-    {% for post in posts %}
+    {% for item in data %}
     <li>
-        <h2>{{ post.title }}</h2>
-        <p><a href="/post/{{ post.id }}">Read post</a></p>
+        <h2>{{ item.title }}</h2>
+        <p><a href="/post/{{ item.id.toString() }}">Read blog</a></p>
     </li>
     {% endfor %}
 </ul>
