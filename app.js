@@ -41,14 +41,16 @@ function* add(id) {
         try{
             this.data = yield Blog.findById(id)
             var data = ToObject(this.data)
-            console.log(data)
+            // console.log(data)
             this.body = yield render('new',{data:data})
         }
         catch(e){
             console.log(e)
         }
     }else{
-        var data = new Blog({})
+        var data = ToObject(new Blog({}))
+        delete data.id
+        // console.log(data)
         this.body = yield render('new',{data:data})
     }
 }
