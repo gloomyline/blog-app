@@ -3,6 +3,7 @@ var koa = require('koa')
 var route = require('koa-route')
 var parse = require('co-body')
 var views = require('co-views')
+var serve = require('koa-static-server')
 
 // 实例化app
 var app = koa()
@@ -14,6 +15,12 @@ var render = views(__dirname + '/views', {
 
 // 连接数据库
 var Blog = require('./db')
+
+// 引入转换数据格式模块
+var msgpack = require('./msgpack')
+
+// 指定静态文件夹目录
+app.use(serve({rootDir:'public',rootPath:'/static'}))
 
 // 路由中间件
 app.use(route.get('/', list))
@@ -27,7 +34,7 @@ function* list() {
     try{
         this.data = yield Blog.find({})
         // console.log(this.data)
-        var data = ToArrObject(this.data)
+        var data = msgpack.decode(msgpack.encode(ToArrObject(this.data)))
         var count = yield Blog.find({}).count()
         this.body = yield render('list',{data:data,count:count})
     }
