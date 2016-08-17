@@ -6,5 +6,27 @@
 </head>
 <body>
     <p>这里是用来测试静态文件</p>
+    <script src="libs/jquery/dist/jquery.min.js"></script>
+    <script src="https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js"></script>
+    <script type="text/javascript">
+        $.getJSON('http://localhost:3333/test/json/int',function(res/*,options status,xhr*/){
+            // console.log(res);
+            // console.log(status);
+            // console.log(xhr);
+            if(res.status == 'y')
+            {
+                console.log(res.msg);
+                var data = res.data.data;
+                data = msgpack.decode(new Uint8Array(data));
+                // console.log(JSON.stringify(res.data));
+                console.log(data);
+                $('<p>').text('这是解析后的数据：' + JSON.stringify(data)).appendTo($('body'));
+            }
+            else
+            {
+                console.log(res.msg);
+            }
+        })
+    </script>
 </body>
 </html>

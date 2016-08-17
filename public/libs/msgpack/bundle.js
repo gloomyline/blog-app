@@ -8391,5 +8391,47 @@ if (!process.browser && process.env.READABLE_STREAM === 'disable' && Stream) {
 
 }).call(this,require('_process'))
 },{"./lib/_stream_duplex.js":28,"./lib/_stream_passthrough.js":29,"./lib/_stream_readable.js":30,"./lib/_stream_transform.js":31,"./lib/_stream_writable.js":32,"_process":9}],40:[function(require,module,exports){
-var msgpack = require('msgpack5')
-},{"msgpack5":13}]},{},[40]);
+(function (Buffer){
+var msgpack = require('msgpack5')() // namespace our extensions
+  , a       = new MyType(2, 'a')
+  , encode  = msgpack.encode
+  , decode  = msgpack.decode
+
+msgpack.register(0x42, MyType, mytipeEncode, mytipeDecode)
+
+console.log(encode({ 'hello': 'world' }).toString('hex'))
+// 81a568656c6c6fa5776f726c64
+console.log(decode(encode({ 'hello': 'world' })))
+// { hello: 'world' }
+console.log(encode(a).toString('hex'))
+// d5426161
+console.log(decode(encode(a)) instanceof MyType)
+// true
+console.log(decode(encode(a)))
+// { value: 'a', size: 2 }
+
+function MyType(size, value) {
+  this.value = value
+  this.size  = size
+}
+
+function mytipeEncode(obj) {
+  var buf = new Buffer(obj.size)
+  buf.fill(obj.value)
+  return buf
+}
+
+function mytipeDecode(data) {
+  var result = new MyType(data.length, data.toString('utf8', 0, 1))
+    , i
+
+  for (i = 0; i < data.length; i++) {
+    if (data.readUInt8(0) != data.readUInt8(i)) {
+      throw new Error('should all be the same')
+    }
+  }
+
+  return result
+}
+}).call(this,require("buffer").Buffer)
+},{"buffer":3,"msgpack5":13}]},{},[40]);

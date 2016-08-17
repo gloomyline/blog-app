@@ -24,8 +24,13 @@ app.use(route.get('/post/:id', router.show))
 app.use(route.post('/post/update/:id', router.update))
 app.use(route.post('/delete/:id', router.del))
 
-// // test data interface route
-// app.use(route.get('/test/json/int',getJsonData))
+// test data interface route
+app.use(route.get('/test/json/int',getJsonData))
+
+function *getJsonData(){
+    var data = msgpack.encode({test:'test'});
+    this.body = {status:'y',msg:'get data successful',data:data}
+}
 
 app.listen(3333);
 console.log('listening on port 3333')
